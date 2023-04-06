@@ -1,5 +1,14 @@
 plugins {
 	id 'java'
+	id "com.github.johnrengelman.shadow" version "6.1.0"
+}
+
+shadowJar {
+	from sourceSets.test.output
+	configurations = [project.configurations.testRuntimeClasspath]
+	manifest {
+		attributes "Main-Class": "org.makingstan.ItemHunterLauncher"
+	}
 }
 
 repositories {
@@ -23,8 +32,8 @@ dependencies {
 	testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
 }
 
-group = 'com.example'
-version = '1.0-SNAPSHOT'
+group = 'org.makingstan'
+version = '1.0'
 sourceCompatibility = '1.8'
 
 tasks.withType(JavaCompile) {
