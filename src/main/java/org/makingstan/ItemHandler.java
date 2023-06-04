@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 
 import static org.makingstan.ConfigElements.*;
@@ -50,10 +51,21 @@ public class ItemHandler {
             // convert the name to a UTF8 valid string, otherwise you'll have weird invisable characters and that could mess up the conditions for a valid item
             String itemName = new String(composition.getMembersName().getBytes(StandardCharsets.UTF_8));
 
+            HashSet<String> completedListNames = new HashSet<>();
+
+            for (Integer integer : completedList) {
+                String name = new String(client.getItemDefinition(integer).getMembersName().getBytes(StandardCharsets.UTF_8));
+                completedListNames.add(name);
+            }
+
+
             if(
                     // don't generate any items that don't have a main, are named null or whatever
                     composition.getName().trim().length() > 0 &&
                             !itemName.trim().equalsIgnoreCase("null") &&
+
+                            // don't generate duplicate clue scroll items, as there are alot of duplicate clue scroll ids
+                            !(completedListNames.contains(itemName) && itemName.toLowerCase().startsWith("clue scroll")) &&
 
                             //We don't want to regenerate any blocked or completed items
                             !blockList.contains(itemId) &&
