@@ -91,13 +91,20 @@ public class ItemHandler {
     {
         if(checkIfCompleted)
         {
-            if(isCurrentItemCompleted() || isCurrentItemSkipped())
+            if((isCurrentItemCompleted() || isCurrentItemSkipped()))
             {
-                int newItemConfirm = JOptionPane.showConfirmDialog(null,
-                        "Are you sure you want to generate a new item?", "Item Hunter",
-                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+                if(config.dialogConfirmation())
+                {
+                    int newItemConfirm = JOptionPane.showConfirmDialog(null,
+                            "Are you sure you want to generate a new item?", "Item Hunter",
+                            JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 
-                if(newItemConfirm == JOptionPane.YES_OPTION)
+                    if(newItemConfirm == JOptionPane.YES_OPTION)
+                    {
+                        newItem();
+                    }
+                }
+                else
                 {
                     newItem();
                 }
@@ -141,12 +148,15 @@ public class ItemHandler {
             return;
         }
 
-        int confirmUnobtainable = JOptionPane.showConfirmDialog(null,
-                "Are you sure you want to set this item to unobtainable? It will be added to your block list and a new item will be generated.", "Item Hunter",
-                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+        if(config.dialogConfirmation())
+        {
+            int confirmUnobtainable = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to set this item to unobtainable? It will be added to your block list and a new item will be generated.", "Item Hunter",
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 
-        // If the user didn't click the yes option, we don't let the unobtainable item event go through the current item.
-        if(confirmUnobtainable != JOptionPane.YES_OPTION) return;
+            // If the user didn't click the yes option, we don't let the unobtainable item event go through the current item.
+            if(confirmUnobtainable != JOptionPane.YES_OPTION) return;
+        }
 
 
         SaveHandler.addItemToList(BLOCK_LIST, (Integer) SaveHandler.getElement(CURRENT_ITEM, int.class));
@@ -163,15 +173,15 @@ public class ItemHandler {
             return;
         }
 
+        if(config.dialogConfirmation())
+        {
+            int confirmSkip = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to skip this item?", "Item Hunter",
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 
-        int confirmSkip = JOptionPane.showConfirmDialog(null,
-                "Are you sure you want to skip this item?", "Item Hunter",
-                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-
-        // If the user didn't click the yes option, we don't skip the current item.
-        if(confirmSkip != JOptionPane.YES_OPTION) return;
-
-
+            // If the user didn't click the yes option, we don't skip the current item.
+            if(confirmSkip != JOptionPane.YES_OPTION) return;
+        }
 
         // Forfeit skipped items if the user wishes to do so
         if(config.forfeitSkippedItems())
@@ -272,12 +282,15 @@ public class ItemHandler {
             return;
         }
 
-        int confirmComplete = JOptionPane.showConfirmDialog(null,
-                "Are you sure you want to complete this item?", "Item Hunter",
-                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+        if(config.dialogConfirmation())
+        {
+            int confirmComplete = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to complete this item?", "Item Hunter",
+                    JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 
-        // Don't continue if they didn't click YES
-        if(confirmComplete != JOptionPane.YES_OPTION) return;
+            // Don't continue if they didn't click YES
+            if(confirmComplete != JOptionPane.YES_OPTION) return;
+        }
 
         // We now know that the user can and wants to complete this item,
         // set our completed variable to true and add our item to the completed list so it won't be generated again

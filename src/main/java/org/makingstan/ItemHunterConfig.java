@@ -47,5 +47,15 @@ public interface ItemHunterConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+			keyName = "Dialog confirmation",
+			name = "Dialog confirmation",
+			description = "Enables the popping up of a dialog."
+	)
+	default boolean dialogConfirmation()
+	{
+		return true;
+	}
+
 
 }
